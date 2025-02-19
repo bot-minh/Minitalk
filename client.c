@@ -1,9 +1,9 @@
 #include <signal.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "ft_printf.h"
+#include "libft/libft.h"
 
-void send_char(pid_t server_pid, char c)
+void send_char(int server_pid, char c)
 {
     for (int i = 7; i >= 0; i--) // Gửi từ bit cao xuống thấp
     {
@@ -15,7 +15,7 @@ void send_char(pid_t server_pid, char c)
     }
 }
 
-void send_message(pid_t server_pid, char *message)
+void send_message(int server_pid, char *message)
 {
     while (*message)
         send_char(server_pid, *message++);
@@ -30,8 +30,13 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    pid_t server_pid = atoi(argv[1]);
+    int server_pid = atoi(argv[1]);
+    if (server_pid == 0)
+    {
+        ft_printf("Invalid PID: %s\n", argv[1]);
+        return (1);
+    }
+    ft_printf("Sending message to PID: %d\n", server_pid);
     send_message(server_pid, argv[2]);
-
     return 0;
 }
